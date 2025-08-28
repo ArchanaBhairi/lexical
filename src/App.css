@@ -43,6 +43,37 @@
   padding: 0 8px;
 }
 
+/* Word-like editor styles */
+.lexical-editor-container {
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+}
+
+.lexical-editor-page {
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border: none;
+  margin: 0 auto;
+  position: relative;
+}
+
+.lexical-editor-content {
+  position: relative;
+  z-index: 2;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+/* Remove any default editor borders or outlines */
+.lexical-editor-content:focus,
+.lexical-editor-content:focus-visible {
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
 .editor-text-bold {
   font-weight: bold;
 }

@@ -5,11 +5,10 @@ import { $getNodeByKey } from "lexical";
 import { Box } from "@mui/material";
 
 /**
- * PaginationPlugin - Creates paginated view similar to Word/Google Docs
- * - Measures DOM nodes and calculates page breaks
- * - Renders visual page backgrounds
- * - Handles automatic and manual page breaks
- * - Supports A4 page dimensions
+ * PaginationPlugin - Creates Word-like paginated view
+ * - No visible borders or gaps
+ * - Text starts from the very top of the page
+ * - Clean page separation
  */
 export default function PaginationPlugin({ 
   pageWidth = 816, // A4 width in pixels (8.5" * 96 DPI)
@@ -153,20 +152,22 @@ export default function PaginationPlugin({
     };
   }, [editor, availableHeight, pageHeight]);
 
-  // Apply page styling to editor
+  // Apply page styling to editor - Word-like appearance
   useEffect(() => {
     const rootEl = editor.getRootElement();
     if (!rootEl) return;
 
-    // Style the editor container
+    // Style the editor container to look like Word
     rootEl.style.width = `${availableWidth}px`;
     rootEl.style.minHeight = `${availableHeight}px`;
     rootEl.style.padding = `${topMargin}px ${rightMargin}px ${bottomMargin}px ${leftMargin}px`;
     rootEl.style.margin = '0';
     rootEl.style.backgroundColor = 'white';
-    rootEl.style.boxShadow = '0 0 10px rgba(0,0,0,0.1)';
+    rootEl.style.boxShadow = 'none'; // Remove any shadow
+    rootEl.style.border = 'none'; // Remove any border
     rootEl.style.position = 'relative';
     rootEl.style.zIndex = '1';
+    rootEl.style.outline = 'none'; // Remove focus outline
 
     return () => {
       // Cleanup styles if needed
@@ -176,8 +177,10 @@ export default function PaginationPlugin({
       rootEl.style.margin = '';
       rootEl.style.backgroundColor = '';
       rootEl.style.boxShadow = '';
+      rootEl.style.border = '';
       rootEl.style.position = '';
       rootEl.style.zIndex = '';
+      rootEl.style.outline = '';
     };
   }, [availableWidth, availableHeight, topMargin, rightMargin, bottomMargin, leftMargin]);
 
@@ -185,17 +188,22 @@ export default function PaginationPlugin({
     <Box
       ref={containerRef}
       sx={{
-        position: 'relative',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#f5f5f5', // Light gray background like Word
         minHeight: '100vh',
-        padding: '20px 0',
+        padding: 0,
+        margin: 0,
       }}
     >
-      {/* Render page backgrounds */}
+      {/* Render clean page backgrounds without borders */}
       {pages.map((page, index) => (
         <Box
           key={`page-${index}`}
@@ -203,49 +211,14 @@ export default function PaginationPlugin({
             width: `${pageWidth}px`,
             height: `${pageHeight}px`,
             backgroundColor: 'white',
-            boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.1)', // Very subtle shadow like Word
             marginBottom: index < pages.length - 1 ? `${pageGap}px` : 0,
             position: 'absolute',
-            top: `${20 + index * (pageHeight + pageGap)}px`,
+            top: `${index * (pageHeight + pageGap)}px`,
             left: '50%',
             transform: 'translateX(-50%)',
             zIndex: 0,
-            border: '1px solid #ddd',
-            '&::before': {
-              content: `"Page ${page.pageNumber}"`,
-              position: 'absolute',
-              bottom: '10px',
-              right: '20px',
-              fontSize: '10px',
-              color: '#999',
-              fontFamily: 'Arial, sans-serif',
-            }
-          }}
-        />
-      ))}
-      
-      {/* Page ruler/guides (optional) */}
-      {pages.map((page, index) => (
-        <Box
-          key={`ruler-${index}`}
-          sx={{
-            width: `${pageWidth}px`,
-            height: `${pageHeight}px`,
-            position: 'absolute',
-            top: `${20 + index * (pageHeight + pageGap)}px`,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            zIndex: 0,
-            pointerEvents: 'none',
-            '&::before': {
-              content: '""',
-              position: 'absolute',
-              top: `${topMargin}px`,
-              left: `${leftMargin}px`,
-              right: `${rightMargin}px`,
-              bottom: `${bottomMargin}px`,
-              border: '1px dashed rgba(0,0,0,0.1)',
-            }
+            border: 'none', // No border
           }}
         />
       ))}

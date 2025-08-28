@@ -75,9 +75,12 @@ const LexicalEditorWrapper = () => {
   return (
     <Box sx={{ 
       width: '100%', 
-      minHeight: '100vh',
+      height: '100vh',
       backgroundColor: '#f5f5f5',
-      position: 'relative'
+      position: 'relative',
+      overflow: 'hidden',
+      display: 'flex',
+      flexDirection: 'column'
     }}>
       <LexicalComposer initialConfig={lexicalEditorConfig}>
         
@@ -94,8 +97,14 @@ const LexicalEditorWrapper = () => {
             setTempMargins={setTempMargins}
           />
 
-          {/* Main editor area with pagination */}
-          <Box sx={{ position: 'relative', width: '100%' }}>
+          {/* Main editor area with Word-like pagination */}
+          <Box sx={{ 
+            position: 'relative', 
+            width: '100%', 
+            height: 'calc(100vh - 120px)', // Subtract toolbar height
+            overflow: 'auto',
+            backgroundColor: '#f5f5f5'
+          }}>
             <PaginationPlugin 
               topMargin={margins.top}
               bottomMargin={margins.bottom}
@@ -103,49 +112,50 @@ const LexicalEditorWrapper = () => {
               rightMargin={margins.right}
             />
             
+            {/* Word-like editor positioned over the pages */}
             <Box sx={{ 
-              position: 'relative', 
+              position: 'absolute', 
+              top: 0,
+              left: '50%',
+              transform: 'translateX(-50%)',
               zIndex: 2,
-              display: 'flex',
-              justifyContent: 'center',
-              paddingTop: '20px'
+              width: '816px', // A4 width
+              minHeight: '100%'
             }}>
-              {/* <Box sx={{ 
-                width: '816px', // A4 width
-                position: 'relative'
-              }}> */}
-                <RichTextPlugin
-                  contentEditable={
-                    <ContentEditable
-                      style={{
-                        minHeight: '1056px', // A4 height
-                        outline: 'none',
-                        padding: `${margins.top}px ${margins.right}px ${margins.bottom}px ${margins.left}px`,
-                        backgroundColor: 'transparent',
-                        fontSize: '14px',
-                        lineHeight: '1.5',
-                        fontFamily: 'Arial, sans-serif',
-                      }}
-                    />
-                  }
-                  // placeholder={
-                  //   <Box
-                  //     sx={{
-                  //       position: 'absolute',
-                  //       top: margins.top + 15,
-                  //       left: margins.left + 10,
-                  //       userSelect: 'none',
-                  //       pointerEvents: 'none',
-                  //       color: '#999',
-                  //       fontSize: '14px',
-                  //     }}
-                  //   >
-                  //     Start typing your document...
-                  //   </Box>
-                  // }
-                  ErrorBoundary={LexicalErrorBoundary}
-                />
-              {/* </Box> */}
+              <RichTextPlugin
+                contentEditable={
+                  <ContentEditable
+                    style={{
+                      minHeight: '1056px', // A4 height
+                      outline: 'none',
+                      padding: '0', // Remove padding, handled by PaginationPlugin
+                      backgroundColor: 'transparent',
+                      fontSize: '14px',
+                      lineHeight: '1.5',
+                      fontFamily: 'Arial, sans-serif',
+                      border: 'none',
+                      width: '100%',
+                    }}
+                  />
+                }
+                placeholder={
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: margins.top + 10,
+                      left: margins.left + 10,
+                      userSelect: 'none',
+                      pointerEvents: 'none',
+                      color: '#999',
+                      fontSize: '14px',
+                      fontFamily: 'Arial, sans-serif',
+                    }}
+                  >
+                    Start typing your document...
+                  </Box>
+                }
+                ErrorBoundary={LexicalErrorBoundary}
+              />
             </Box>
           </Box>
 
