@@ -9,13 +9,12 @@ import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
 import { TRANSFORMERS } from "@lexical/markdown";
 import { TablePlugin } from "@lexical/react/LexicalTablePlugin";
-import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
+import {LexicalErrorBoundary} from "@lexical/react/LexicalErrorBoundary";
 
 import { lexicalEditorConfig } from "../../config/lexicalEditorConfig";
 import LexicalEditorTopBar from "../LexicalEditorTopBar";
 import FloatingTextFormatToolbarPlugin from "../CustomPlugins/FloatingTextFormatPlugin";
 import ImagesPlugin from "../CustomPlugins/ImagePlugin";
-import { CellContext } from "../CustomPlugins/TablePlugin";
 import PaginationPlugin from "../CustomPlugins/PaginationPlugin";
 import { Box, Typography } from "@mui/material";
 import { $generateHtmlFromNodes } from "@lexical/html";
@@ -81,12 +80,7 @@ const LexicalEditorWrapper = () => {
       position: 'relative'
     }}>
       <LexicalComposer initialConfig={lexicalEditorConfig}>
-        <CellContext.Provider
-          value={{
-            cellEditorConfig,
-            cellEditorPlugins: null,
-          }}
-        >
+        
           {/* Top toolbar */}
           <LexicalEditorTopBar 
             onDownloadDocx={onDownloadDocx}
@@ -116,10 +110,10 @@ const LexicalEditorWrapper = () => {
               justifyContent: 'center',
               paddingTop: '20px'
             }}>
-              <Box sx={{ 
+              {/* <Box sx={{ 
                 width: '816px', // A4 width
                 position: 'relative'
-              }}>
+              }}> */}
                 <RichTextPlugin
                   contentEditable={
                     <ContentEditable
@@ -134,24 +128,24 @@ const LexicalEditorWrapper = () => {
                       }}
                     />
                   }
-                  placeholder={
-                    <Box
-                      sx={{
-                        position: 'absolute',
-                        top: margins.top + 15,
-                        left: margins.left + 10,
-                        userSelect: 'none',
-                        pointerEvents: 'none',
-                        color: '#999',
-                        fontSize: '14px',
-                      }}
-                    >
-                      Start typing your document...
-                    </Box>
-                  }
+                  // placeholder={
+                  //   <Box
+                  //     sx={{
+                  //       position: 'absolute',
+                  //       top: margins.top + 15,
+                  //       left: margins.left + 10,
+                  //       userSelect: 'none',
+                  //       pointerEvents: 'none',
+                  //       color: '#999',
+                  //       fontSize: '14px',
+                  //     }}
+                  //   >
+                  //     Start typing your document...
+                  //   </Box>
+                  // }
                   ErrorBoundary={LexicalErrorBoundary}
                 />
-              </Box>
+              {/* </Box> */}
             </Box>
           </Box>
 
@@ -164,7 +158,7 @@ const LexicalEditorWrapper = () => {
           <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
           <TablePlugin />
           <FloatingTextFormatToolbarPlugin />
-        </CellContext.Provider>
+        
       </LexicalComposer>
     </Box>
   );
