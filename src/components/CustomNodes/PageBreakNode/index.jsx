@@ -57,9 +57,23 @@ export class PageBreakNode extends DecoratorNode {
  
   decorate() {
     return (
-      <div className="page-break">
-        <span>Page Break</span>
-      </div>
+ 
+      <div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    textAlign: "center",
+    margin: "20px 0",
+    color: "#999",
+    fontSize: "14px",
+    fontWeight: "500",
+  }}
+>
+  <div style={{ flex: 1, borderTop: "1px dashed #ccc" }}></div>
+  <span style={{ margin: "0 10px", whiteSpace: "nowrap" }}>Page Break</span>
+  <div style={{ flex: 1, borderTop: "1px dashed #ccc" }}></div>
+</div>
+ 
     );
   }
  
